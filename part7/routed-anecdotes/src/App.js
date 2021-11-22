@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
 
 const Menu = () => {
   const padding = {
@@ -25,7 +25,9 @@ const AnecdoteList = ({ anecdotes }) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
       ))}
     </ul>
   </div>
@@ -53,19 +55,36 @@ const About = () => (
   </div>
 );
 
-const Footer = () => (
-  <div>
-    Anecdote app for{" "}
-    <a href="https://courses.helsinki.fi/fi/tkt21009">
-      Full Stack -websovelluskehitys
-    </a>
-    . See{" "}
-    <a href="https://github.com/fullstack-hy/routed-anecdotes/blob/master/src/App.js">
-      https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js
-    </a>{" "}
-    for the source code.
-  </div>
-);
+const Footer = () => {
+  const style = { marginTop: 10 };
+
+  return (
+    <div style={style}>
+      Anecdote app for{" "}
+      <a href="https://courses.helsinki.fi/fi/tkt21009">
+        Full Stack -websovelluskehitys
+      </a>
+      . See{" "}
+      <a href="https://github.com/fullstack-hy/routed-anecdotes/blob/master/src/App.js">
+        https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js
+      </a>{" "}
+      for the source code.
+    </div>
+  );
+};
+
+const Anecdote = ({ anecdote }) => {
+  const style = { marginTop: 10, marginBottom: 10 };
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <div style={style}>{`has ${anecdote.votes} votes`}</div>
+      <div style={style}>
+        for more info see <a href={anecdote.info}>{anecdote.info}</a>
+      </div>
+    </div>
+  );
+};
 
 const CreateNew = (props) => {
   const [content, setContent] = useState("");
@@ -154,24 +173,27 @@ const App = () => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
 
+  const match = useRouteMatch("/anecdotes/:id");
+  const anecdote = match ? anecdoteById(match.params.id) : null;
+
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Router>
-        <Menu />
-        <Switch>
-          <Route path="/create">
-            <CreateNew addNew={addNew} />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/">
-            <AnecdoteList anecdotes={anecdotes} />
-          </Route>
-        </Switch>
-      </Router>
-
+      <Menu />
+      <Switch>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdote={anecdote} />
+        </Route>
+        <Route path="/create">
+          <CreateNew addNew={addNew} />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/">
+          <AnecdoteList anecdotes={anecdotes} />
+        </Route>
+      </Switch>
       <Footer />
     </div>
   );
