@@ -3,9 +3,9 @@ import { useHistory } from "react-router";
 import { useField } from "../hooks";
 
 const CreateNew = ({ addNew }) => {
-  const content = useField("text");
-  const author = useField("text");
-  const info = useField("text");
+  const { reset: resetContent, ...content } = useField("text");
+  const { reset: resetAuthor, ...author } = useField("text");
+  const { reset: resetInfo, ...info } = useField("text");
   const history = useHistory();
 
   const handleSubmit = (e) => {
@@ -20,9 +20,9 @@ const CreateNew = ({ addNew }) => {
   };
 
   const handleResetClick = (event) => {
-    content.reset();
-    author.reset();
-    info.reset();
+    resetContent();
+    resetAuthor();
+    resetInfo();
   };
 
   return (
