@@ -19,10 +19,16 @@ const CreateNew = ({ addNew }) => {
     history.push("/anecdotes");
   };
 
+  const handleResetClick = (event) => {
+    content.reset();
+    author.reset();
+    info.reset();
+  };
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleResetClick}>
         <div>
           content
           <input {...content} />
@@ -35,7 +41,8 @@ const CreateNew = ({ addNew }) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
+        <button type="reset">reset</button>
       </form>
     </div>
   );
