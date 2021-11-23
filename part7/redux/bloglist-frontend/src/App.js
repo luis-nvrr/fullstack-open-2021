@@ -7,8 +7,10 @@ import LoginForm from './components/LoginForm'
 import Logout from './components/Logout'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import UsersView from './components/UsersView'
 
 import { useSelector } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 
 import './App.css'
 
@@ -29,13 +31,21 @@ const App = () => {
           <div className="section">
             <Logout />
           </div>
-          <div className="section">
-            <h3>Create new Blog</h3>
-            <Togglable buttonLabel="new blog">
-              <BlogForm />
-            </Togglable>
-          </div>
-          <BlogList />
+          <Routes>
+            <Route path="/users" element={<UsersView />} />
+            <Route
+              path="/"
+              element={
+                <div className="section">
+                  <h3>Create new Blog</h3>
+                  <Togglable buttonLabel="new blog">
+                    <BlogForm />
+                  </Togglable>
+                  <BlogList />
+                </div>
+              }
+            />
+          </Routes>
         </div>
       )}
     </div>
