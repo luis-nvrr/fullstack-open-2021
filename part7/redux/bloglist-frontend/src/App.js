@@ -62,19 +62,6 @@ const App = () => {
     setUser(null)
   }
 
-  const likeBlog = async (blog) => {
-    try {
-      const likedBlog = { likes: blog.likes++, ...blog }
-      // eslint-disable-next-line no-unused-vars
-      const updatedBlog = await blogService.update(likedBlog)
-      //const orderedBlogs = orderBlogsDescendant(blogs.map((blog) => (blog.id === likedBlog.id ? updatedBlog : blog)))
-      //setBlogs(orderedBlogs)
-      dispatch(setNotification('Blog liked successfully', 'success', 5))
-    } catch (exception) {
-      dispatch(setNotification("Blog couldn't be liked", 'error', 5))
-    }
-  }
-
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
   }
@@ -114,7 +101,6 @@ const App = () => {
               <BlogForm />
             </Togglable>
           </div>
-          <div classList likeBlog={likeBlog} user={user} />
           <BlogList user={user} />
         </div>
       )}

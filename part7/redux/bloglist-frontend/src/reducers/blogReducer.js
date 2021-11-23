@@ -12,6 +12,9 @@ const reducer = (state = [], action) => {
     case 'DELETE':
       return state.filter((blog) => blog.id !== action.payload.blog.id)
 
+    case 'LIKE':
+      return state.map((blog) => (blog.id === action.payload.blog.id ? action.payload.blog : blog))
+
     default:
       return state
   }
@@ -55,6 +58,20 @@ export const deleteBlog = (blogToBeDeleted) => {
     } catch (exception) {
       // eslint-disable-next-line quotes
       dispatch(setNotification("Blog couldn't be deleted", 'error', 5))
+    }
+  }
+}
+
+export const likeBlog = (blogToBeLiked) => {
+  return async (dispatch) => {
+    try {
+      const blogToUpdate = { likes: blogToBeLiked.likes++, ...blogToBeLiked }
+      const likedBlog = await blogService.update(blogToUpdate)
+      dispatch({ type: 'LIKE', payload: { blog: likedBlog } })
+      dispatch(setNotification('Blog liked successfully', 'success', 5))
+    } catch (exception) {
+      // eslint-disable-next-line quotes
+      dispatch(setNotification("Blog couldn't be liked", 'error', 5))
     }
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteBlog } from '../reducers/blogReducer'
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const BlogDetails = ({ blog, likeBlog, user }) => {
+const BlogDetails = ({ blog, user }) => {
   const dispatch = useDispatch()
   const deleteButtonStyle = {
     backgroundColor: '#008CBA'
@@ -10,7 +10,7 @@ const BlogDetails = ({ blog, likeBlog, user }) => {
 
   const handleLikeBlog = (event) => {
     event.preventDefault()
-    likeBlog(blog)
+    dispatch(likeBlog(blog))
   }
 
   const handleDeleteBlog = (event) => {
