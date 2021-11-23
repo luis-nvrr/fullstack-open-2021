@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -17,20 +17,11 @@ import { useDispatch } from 'react-redux'
 import './App.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(orderBlogsDescendant(blogs)))
-  }, [])
-
-  const orderBlogsDescendant = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes)
-  }
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistAppUser')
@@ -71,24 +62,11 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (blog) => {
-    try {
-      const newBlog = await blogService.create(blog)
-      setBlogs(blogs.concat(newBlog))
-
-      blogFormRef.current.toggleVisibility()
-      blogRef.current.clearBlogInfo()
-      dispatch(setNotification('Blog created successfully', 'success', 5))
-    } catch (exception) {
-      dispatch(setNotification("Blog couldn't be created", 'error', 5))
-    }
-  }
-
   const deleteBlog = async (deletedBlog) => {
     try {
       if (!window.confirm(`Are you sure you want to remove ${deletedBlog.title}`)) return
       await blogService.remove(deletedBlog)
-      setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
+      //setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
       dispatch(setNotification('Blog deleted successfully', 'success', 5))
     } catch (exception) {
       dispatch(setNotification("Blog couldn't be deleted", 'error', 5))
@@ -98,9 +76,10 @@ const App = () => {
   const likeBlog = async (blog) => {
     try {
       const likedBlog = { likes: blog.likes++, ...blog }
+      // eslint-disable-next-line no-unused-vars
       const updatedBlog = await blogService.update(likedBlog)
-      const orderedBlogs = orderBlogsDescendant(blogs.map((blog) => (blog.id === likedBlog.id ? updatedBlog : blog)))
-      setBlogs(orderedBlogs)
+      //const orderedBlogs = orderBlogsDescendant(blogs.map((blog) => (blog.id === likedBlog.id ? updatedBlog : blog)))
+      //setBlogs(orderedBlogs)
       dispatch(setNotification('Blog liked successfully', 'success', 5))
     } catch (exception) {
       console.log(exception)
@@ -120,9 +99,6 @@ const App = () => {
     setUsername('')
     setPassword('')
   }
-
-  const blogFormRef = useRef()
-  const blogRef = useRef()
 
   return (
     <div>
@@ -146,12 +122,12 @@ const App = () => {
           </div>
           <div className="section">
             <h3>Create new Blog</h3>
-            <Togglable buttonLabel="new blog" ref={blogFormRef}>
-              <BlogForm createBlog={createBlog} ref={blogRef} />
+            <Togglable buttonLabel="new blog">
+              <BlogForm />
             </Togglable>
           </div>
-          <div className="section"></div>
-          <BlogList blogs={blogs} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+          <div classList likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+          <BlogList />
         </div>
       )}
     </div>

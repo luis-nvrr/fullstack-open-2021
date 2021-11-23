@@ -1,10 +1,12 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = React.forwardRef((props, ref) => {
-  const createBlog = props.createBlog
+const BlogForm = ({ toggleVisibility }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const dispatch = useDispatch()
 
   const handleBlogFormSubmit = (event) => {
     event.preventDefault()
@@ -14,7 +16,9 @@ const BlogForm = React.forwardRef((props, ref) => {
       url: url
     }
 
-    createBlog(blog)
+    dispatch(createBlog(blog))
+    clearBlogInfo()
+    toggleVisibility()
   }
 
   const handleTitleChange = (event) => {
@@ -27,12 +31,6 @@ const BlogForm = React.forwardRef((props, ref) => {
     setUrl(event.target.value)
   }
 
-  useImperativeHandle(ref, () => {
-    return {
-      clearBlogInfo
-    }
-  })
-
   const clearBlogInfo = () => {
     setAuthor('')
     setTitle('')
@@ -40,23 +38,23 @@ const BlogForm = React.forwardRef((props, ref) => {
   }
 
   return (
-    <div >
-      <form id='create-form' onSubmit={handleBlogFormSubmit}>
+    <div>
+      <form id="create-form" onSubmit={handleBlogFormSubmit}>
         <div>
-          <label>title</label> <input id='title' value={title} onChange={handleTitleChange} />
+          <label>title</label> <input id="title" value={title} onChange={handleTitleChange} />
         </div>
         <div>
-          <label>author</label> <input id='author' value={author} onChange={handleAuthorChange} />
+          <label>author</label> <input id="author" value={author} onChange={handleAuthorChange} />
         </div>
         <div>
-          <label>url</label> <input id='url' value={url} onChange={handleUrlChange} />
+          <label>url</label> <input id="url" value={url} onChange={handleUrlChange} />
         </div>
-        <button id='submit-button' type="submit">save</button>
+        <button id="submit-button" type="submit">
+          save
+        </button>
       </form>
     </div>
   )
-})
-
-BlogForm.displayName = 'BlogForm'
+}
 
 export default BlogForm
