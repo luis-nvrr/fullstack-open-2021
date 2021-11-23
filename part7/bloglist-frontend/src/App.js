@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React, { useState, useEffect, useRef } from 'react'
 
 import blogService from './services/blogs'
@@ -10,6 +11,9 @@ import Logout from './components/Logout'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
+
 import './App.css'
 
 const App = () => {
@@ -17,8 +21,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-  const [notificationType, setNotificationType] = useState('')
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(orderBlogsDescendant(blogs)))
@@ -50,10 +54,10 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
 
-      showMessage('Logged in', 'success')
+      dispatch(setNotification('Logged in', 'success', 5))
       clearLoginInfo()
     } catch (exception) {
-      showMessage('Wrong credentials', 'error')
+      dispatch(setNotification('Wrong credentials', 'error', 5))
       clearLoginInfo()
     }
   }
@@ -63,7 +67,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBloglistAppUser')
 
     blogService.removeToken(user)
-    showMessage('Logged out', 'success')
+    dispatch(setNotification('Logged out', 'success', 5))
     setUser(null)
   }
 
@@ -74,9 +78,9 @@ const App = () => {
 
       blogFormRef.current.toggleVisibility()
       blogRef.current.clearBlogInfo()
-      showMessage('Blog created successfully', 'success')
+      dispatch(setNotification('Blog created successfully', 'success', 5))
     } catch (exception) {
-      showMessage('Blog couldn\'t be created', 'error')
+      dispatch(setNotification("Blog couldn't be created", 'error', 5))
     }
   }
 
@@ -85,9 +89,9 @@ const App = () => {
       if (!window.confirm(`Are you sure you want to remove ${deletedBlog.title}`)) return
       await blogService.remove(deletedBlog)
       setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
-      showMessage('Blog deleted successfully', 'success')
+      dispatch(setNotification('Blog deleted successfully', 'success', 5))
     } catch (exception) {
-      showMessage('Blog couldn\'t be deleted', 'error')
+      dispatch(setNotification("Blog couldn't be deleted", 'error', 5))
     }
   }
 
@@ -97,20 +101,11 @@ const App = () => {
       const updatedBlog = await blogService.update(likedBlog)
       const orderedBlogs = orderBlogsDescendant(blogs.map((blog) => (blog.id === likedBlog.id ? updatedBlog : blog)))
       setBlogs(orderedBlogs)
-      showMessage('Blog liked successfully', 'success')
+      dispatch(setNotification('Blog liked successfully', 'success', 5))
     } catch (exception) {
       console.log(exception)
-      showMessage('Blog couldn\'t be liked', 'error')
+      dispatch(setNotification("Blog couldn't be liked", 'error', 5))
     }
-  }
-
-  const showMessage = (message, type) => {
-    setMessage(message)
-    setNotificationType(type)
-    setTimeout(() => {
-      setMessage(null)
-      setNotificationType('')
-    }, 5000)
   }
 
   const handleUsernameChange = (event) => {
@@ -131,7 +126,7 @@ const App = () => {
 
   return (
     <div>
-      {message && <Notification message={message} notificationType={notificationType} />}
+      <Notification />
       {!user ? (
         <div>
           <h2>login</h2>
