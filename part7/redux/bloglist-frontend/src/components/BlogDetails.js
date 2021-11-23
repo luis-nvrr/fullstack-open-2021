@@ -1,9 +1,11 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const BlogDetails = ({ blog, user }) => {
+const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
+
   const deleteButtonStyle = {
     backgroundColor: '#008CBA'
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BlogDetails from './BlogDetails'
 
-const BlogItem = ({ blog, user }) => {
+const BlogItem = ({ blog }) => {
   const [visible, setVisible] = useState(false)
   const buttonLabel = visible ? 'hide' : 'view'
 
@@ -28,7 +28,7 @@ const BlogItem = ({ blog, user }) => {
         </button>
       </label>
 
-      {visible && <BlogDetails blog={blog} user={user} />}
+      {visible && <BlogDetails blog={blog} />}
     </div>
   )
 }
