@@ -1,15 +1,9 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { initialize } from '../reducers/userReducer'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const UsersView = () => {
   const users = useSelector((state) => state.users)
-  const dispatch = useDispatch()
-
-  React.useEffect(() => {
-    dispatch(initialize())
-  }, [])
 
   const style = {
     textAlign: 'center'

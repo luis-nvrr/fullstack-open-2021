@@ -1,10 +1,7 @@
-import React, { useState } from 'react'
-import BlogDetails from './BlogDetails'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const BlogItem = ({ blog }) => {
-  const [visible, setVisible] = useState(false)
-  const buttonLabel = visible ? 'hide' : 'view'
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,22 +10,15 @@ const BlogItem = ({ blog }) => {
     marginBottom: 5
   }
 
-  const handleDetailsClick = () => {
-    setVisible(!visible)
-  }
-
   return (
     <div className="blogListItem" style={blogStyle}>
       <label>
         <label className="blogItem">
-          {blog.title} {blog.author}
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
         </label>
-        <button className="showDetailsButton" onClick={handleDetailsClick}>
-          {buttonLabel}
-        </button>
       </label>
-
-      {visible && <BlogDetails blog={blog} />}
     </div>
   )
 }

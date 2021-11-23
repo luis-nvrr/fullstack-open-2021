@@ -8,9 +8,11 @@ import Logout from './components/Logout'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import UsersView from './components/UsersView'
+import IndividualBlogView from './components/IndividualBlogView'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Route, Routes, useMatch } from 'react-router-dom'
+import { initialize } from './reducers/userReducer'
 
 import './App.css'
 import UserBlogs from './components/UserBlogs'
@@ -18,8 +20,18 @@ import UserBlogs from './components/UserBlogs'
 const App = () => {
   const loggedUser = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
-  const match = useMatch('/users/:id')
-  const userMatch = match ? users.find((user) => user.id === match.params.id) : null
+  const blogs = useSelector((state) => state.blogs)
+  const dispatch = useDispatch()
+
+  const userMatch = useMatch('/users/:id')
+  const userMatched = userMatch ? users.find((user) => user.id === userMatch.params.id) : null
+
+  const blogMatch = useMatch('/blogs/:id')
+  const blogMatched = blogMatch ? blogs.find((blog) => blog.id === blogMatch.params.id) : null
+
+  React.useEffect(() => {
+    dispatch(initialize())
+  }, [])
 
   return (
     <div>
@@ -36,7 +48,8 @@ const App = () => {
             <Logout />
           </div>
           <Routes>
-            <Route path="/users/:id" element={<UserBlogs user={userMatch} />} />
+            <Route path="/users/:id" element={<UserBlogs user={userMatched} />} />
+            <Route path="/blogs/:id" element={<IndividualBlogView blog={blogMatched} />} />
             <Route path="/users" element={<UsersView />} />
             <Route
               path="/"
