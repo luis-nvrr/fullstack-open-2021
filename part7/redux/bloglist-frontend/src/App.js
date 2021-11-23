@@ -10,17 +10,21 @@ import Togglable from './components/Togglable'
 import UsersView from './components/UsersView'
 
 import { useSelector } from 'react-redux'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useMatch } from 'react-router-dom'
 
 import './App.css'
+import UserBlogs from './components/UserBlogs'
 
 const App = () => {
-  const user = useSelector((state) => state.user)
+  const loggedUser = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
+  const match = useMatch('/users/:id')
+  const userMatch = match ? users.find((user) => user.id === match.params.id) : null
 
   return (
     <div>
       <Notification />
-      {!user ? (
+      {!loggedUser ? (
         <div>
           <h2>login</h2>
           <LoginForm />
@@ -32,6 +36,7 @@ const App = () => {
             <Logout />
           </div>
           <Routes>
+            <Route path="/users/:id" element={<UserBlogs user={userMatch} />} />
             <Route path="/users" element={<UsersView />} />
             <Route
               path="/"
