@@ -3,7 +3,6 @@ import loginService from '../services/login'
 import { setNotification } from './notificationReducer'
 
 const reducer = (state = null, action) => {
-  console.log(state, action)
   switch (action.type) {
     case 'LOADUSER':
       return action.payload.user

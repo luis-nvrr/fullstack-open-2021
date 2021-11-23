@@ -14,7 +14,6 @@ import './App.css'
 
 const App = () => {
   const user = useSelector((state) => state.user)
-  console.log(user)
 
   return (
     <div>
