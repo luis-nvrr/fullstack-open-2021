@@ -62,17 +62,6 @@ const App = () => {
     setUser(null)
   }
 
-  const deleteBlog = async (deletedBlog) => {
-    try {
-      if (!window.confirm(`Are you sure you want to remove ${deletedBlog.title}`)) return
-      await blogService.remove(deletedBlog)
-      //setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
-      dispatch(setNotification('Blog deleted successfully', 'success', 5))
-    } catch (exception) {
-      dispatch(setNotification("Blog couldn't be deleted", 'error', 5))
-    }
-  }
-
   const likeBlog = async (blog) => {
     try {
       const likedBlog = { likes: blog.likes++, ...blog }
@@ -82,7 +71,6 @@ const App = () => {
       //setBlogs(orderedBlogs)
       dispatch(setNotification('Blog liked successfully', 'success', 5))
     } catch (exception) {
-      console.log(exception)
       dispatch(setNotification("Blog couldn't be liked", 'error', 5))
     }
   }
@@ -126,8 +114,8 @@ const App = () => {
               <BlogForm />
             </Togglable>
           </div>
-          <div classList likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
-          <BlogList />
+          <div classList likeBlog={likeBlog} user={user} />
+          <BlogList user={user} />
         </div>
       )}
     </div>

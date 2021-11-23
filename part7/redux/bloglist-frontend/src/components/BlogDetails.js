@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBlog } from '../reducers/blogReducer'
 
-const BlogDetails = ({ blog, likeBlog, deleteBlog, user }) => {
+const BlogDetails = ({ blog, likeBlog, user }) => {
+  const dispatch = useDispatch()
   const deleteButtonStyle = {
     backgroundColor: '#008CBA'
   }
@@ -12,15 +15,21 @@ const BlogDetails = ({ blog, likeBlog, deleteBlog, user }) => {
 
   const handleDeleteBlog = (event) => {
     event.preventDefault()
-    deleteBlog(blog)
+    if (!window.confirm(`Are you sure you want to remove ${blog.title}`)) return
+    dispatch(deleteBlog(blog))
   }
 
   return (
     <div>
       <div>title: {blog.title}</div>
-      <div className='urlLabel'>url: {blog.url}</div>
+      <div className="urlLabel">url: {blog.url}</div>
       <div>
-        <label className='likesCountLabel'>likes: <span className='likesBadge'>{blog.likes}</span></label> <button className='likeButton' onClick={handleLikeBlog}>like</button>
+        <label className="likesCountLabel">
+          likes: <span className="likesBadge">{blog.likes}</span>
+        </label>{' '}
+        <button className="likeButton" onClick={handleLikeBlog}>
+          like
+        </button>
       </div>
       <div>author: {blog.author}</div>
       {user.username === blog.user.username && (

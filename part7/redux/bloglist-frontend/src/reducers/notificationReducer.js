@@ -1,10 +1,8 @@
 let currentNotification
 
 const reducer = (state = {}, action) => {
-  console.log(state)
   switch (action.type) {
     case 'CREATE_NOTIFICATION':
-      console.log(state)
       return { message: action.data.message, type: action.data.type }
 
     case 'DELETE_NOTIFICATION':
@@ -25,7 +23,6 @@ export const setNotification = (message, type, time) => {
 
     currentNotification = setTimeout(() => {
       dispatch(removeNotification())
-      console.log('remove')
     }, time * 1000)
   }
 }

@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { initialize } from '../reducers/blogReducer'
 
-const BlogList = ({ likeBlog, deleteBlog, user }) => {
+const BlogList = ({ likeBlog, user }) => {
+  const dispatch = useDispatch()
+
   const orderBlogsDescendant = (blogs) => {
     return blogs.sort((a, b) => b.likes - a.likes)
   }
 
-  const blogs = useSelector((state) => (state.blogs ? orderBlogsDescendant(state.blogs) : state.blogs))
-  console.log(blogs)
+  const blogs = useSelector((state) => orderBlogsDescendant(state.blogs))
 
-  const dispatch = useDispatch()
   React.useEffect(() => {
     dispatch(initialize())
   }, [])
@@ -21,7 +21,7 @@ const BlogList = ({ likeBlog, deleteBlog, user }) => {
     <div id="blog-list">
       <h3>Blogs list</h3>
       {blogs.map((blog) => (
-        <BlogItem key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+        <BlogItem key={blog.id} blog={blog} likeBlog={likeBlog} user={user} />
       ))}
     </div>
   )
