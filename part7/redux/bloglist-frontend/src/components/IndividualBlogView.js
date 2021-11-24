@@ -28,7 +28,7 @@ const IndividualBlogView = ({ blog }) => {
 
   return (
     <div>
-      <h1>{blog.title}</h1>
+      <h2>{blog.title}</h2>
       <a href={blog.url}>{blog.url}</a>
       <div>
         <label>
@@ -42,6 +42,12 @@ const IndividualBlogView = ({ blog }) => {
           remove
         </button>
       )}
+      <h2>Comments</h2>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>{comment.content}</li>
+        ))}
+      </ul>
     </div>
   )
 }

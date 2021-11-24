@@ -2,13 +2,16 @@ const blogsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {
-    username: 1,
-    name: 1,
-  })
+  const blogs = await Blog.find({})
+    .populate('user', {
+      username: 1,
+      name: 1,
+    })
+    .populate('comments', { content: 1 })
 
   response.json(blogs)
 })
@@ -71,16 +74,37 @@ blogsRouter.put('/:id', async (request, response) => {
   }
   const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, {
     new: true,
-  }).populate('user', {
-    username: 1,
-    name: 1,
   })
+    .populate('user', {
+      username: 1,
+      name: 1,
+    })
+    .populate('comments', { content: 1 })
 
   if (!updatedBlog) {
     return response.status(404).end()
   }
 
   response.json(updatedBlog)
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { id } = request.params
+  const { body } = request
+  const blogToUpdate = await Blog.findById(id)
+
+  const comment = new Comment({
+    blog: id,
+    content: body.content,
+  })
+
+  const savedComment = await comment.save()
+  blogToUpdate.comments = blogToUpdate.comments.concat(
+    savedComment._id,
+  )
+
+  await blogToUpdate.save()
+  response.status(201).json(savedComment)
 })
 
 module.exports = blogsRouter
