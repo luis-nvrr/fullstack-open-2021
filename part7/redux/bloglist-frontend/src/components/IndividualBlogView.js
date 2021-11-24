@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { Navigate } from 'react-router'
+import CommentForm from './CommentForm'
 
 const IndividualBlogView = ({ blog }) => {
   const dispatch = useDispatch()
@@ -43,6 +44,7 @@ const IndividualBlogView = ({ blog }) => {
         </button>
       )}
       <h2>Comments</h2>
+      <CommentForm blog={blog} />
       <ul>
         {blog.comments.map((comment) => (
           <li key={comment.id}>{comment.content}</li>

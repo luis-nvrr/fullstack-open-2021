@@ -12,7 +12,8 @@ import Menu from './components/Menu'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { Route, Routes, useMatch, Navigate } from 'react-router-dom'
-import { initialize } from './reducers/userReducer'
+import { initialize as initializeUser } from './reducers/userReducer'
+import { initialize as initializeBlog } from './reducers/blogReducer'
 
 import './App.css'
 import UserBlogs from './components/UserBlogs'
@@ -30,7 +31,8 @@ const App = () => {
   const blogMatched = blogMatch ? blogs.find((blog) => blog.id === blogMatch.params.id) : null
 
   React.useEffect(() => {
-    dispatch(initialize())
+    dispatch(initializeUser())
+    dispatch(initializeBlog())
   }, [])
 
   return (

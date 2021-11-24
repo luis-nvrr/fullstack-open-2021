@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
@@ -14,6 +15,15 @@ const reducer = (state = [], action) => {
 
     case 'LIKE':
       return state.map((blog) => (blog.id === action.payload.blog.id ? action.payload.blog : blog))
+
+    case 'COMMENT':
+      const commentBlogId = action.payload.comment.blog
+      const comment = { content: action.payload.comment.content, id: action.payload.comment.id }
+      const blogToUpdate = state.find((b) => b.id === commentBlogId)
+      const commentsToUpdate = [...blogToUpdate.comments, comment]
+      const updatedBlog = { ...blogToUpdate, comments: commentsToUpdate }
+      const blogs = state.map((blog) => (blog.id === commentBlogId ? updatedBlog : blog))
+      return blogs
 
     default:
       return state
@@ -72,6 +82,22 @@ export const likeBlog = (blogToBeLiked) => {
     } catch (exception) {
       // eslint-disable-next-line quotes
       dispatch(setNotification("Blog couldn't be liked", 'error', 5))
+    }
+  }
+}
+
+export const createComment = (commentToBeWritten, blogToBeCommented) => {
+  return async (dispatch) => {
+    try {
+      const comment = await blogService.comment(blogToBeCommented, commentToBeWritten)
+      dispatch({
+        type: 'COMMENT',
+        payload: { comment }
+      })
+      dispatch(setNotification('Comment created!', 'success', 5))
+    } catch (error) {
+      // eslint-disable-next-line quotes
+      dispatch(setNotification(`Comment couldn't be created!`, 'error', 5))
     }
   }
 }

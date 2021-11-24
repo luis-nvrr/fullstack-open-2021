@@ -1,21 +1,13 @@
 import React from 'react'
 import BlogItem from './BlogItem'
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { initialize } from '../reducers/blogReducer'
 
 const BlogList = () => {
-  const dispatch = useDispatch()
-
   const orderBlogsDescendant = (blogs) => {
     return blogs.sort((a, b) => b.likes - a.likes)
   }
 
   const blogs = useSelector((state) => orderBlogsDescendant(state.blogs))
-
-  React.useEffect(() => {
-    dispatch(initialize())
-  }, [])
 
   return (
     <div id="blog-list">
