@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+// eslint-disable-next-line no-unused-vars
+import { Stack, Box, FormControl, Input, FormLabel, Button, Center } from '@chakra-ui/react'
 
 const BlogForm = ({ toggleVisibility }) => {
   const [title, setTitle] = useState('')
@@ -38,22 +40,30 @@ const BlogForm = ({ toggleVisibility }) => {
   }
 
   return (
-    <div>
-      <form id="create-form" onSubmit={handleBlogFormSubmit}>
-        <div>
-          <label>title</label> <input id="title" value={title} onChange={handleTitleChange} />
-        </div>
-        <div>
-          <label>author</label> <input id="author" value={author} onChange={handleAuthorChange} />
-        </div>
-        <div>
-          <label>url</label> <input id="url" value={url} onChange={handleUrlChange} />
-        </div>
-        <button id="submit-button" type="submit">
-          save
-        </button>
+    <Stack direction="column">
+      <form onSubmit={handleBlogFormSubmit}>
+        <FormControl isRequired>
+          <FormLabel>Title</FormLabel>
+          <Input type="text" placeholder="title" value={title} onChange={handleTitleChange} />
+        </FormControl>
+        <FormControl isRequired marginTop={3}>
+          <FormLabel>Author</FormLabel>
+          <Input id="author" placeholder="author" value={author} onChange={handleAuthorChange} />
+        </FormControl>
+        <FormControl isRequired marginTop={3}>
+          <FormLabel>Url</FormLabel>
+          <Input id="url" placeholder="url" value={url} onChange={handleUrlChange} />
+        </FormControl>
+        <Stack marginTop={3} direction="row" justifyContent="center">
+          <Button type="button" size="md" colorScheme="teal" variant="outline" onClick={toggleVisibility}>
+            Cancel
+          </Button>
+          <Button maxSize="md" colorScheme="teal" type="submit">
+            Save
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Stack>
   )
 }
 

@@ -3,14 +3,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { Navigate } from 'react-router'
 import CommentForm from './CommentForm'
+import {
+  Divider,
+  Stack,
+  Heading,
+  Link as ChakraLink,
+  Box,
+  Button,
+  TagLabel,
+  InputGroup,
+  Text,
+  List,
+  ListItem,
+  ListIcon
+} from '@chakra-ui/react'
+
+import { BiComment } from 'react-icons/bi'
 
 const IndividualBlogView = ({ blog }) => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
-
-  const deleteButtonStyle = {
-    backgroundColor: '#008CBA'
-  }
 
   const handleLikeBlog = (event) => {
     event.preventDefault()
@@ -28,29 +40,41 @@ const IndividualBlogView = ({ blog }) => {
   }
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        <label>
-          likes: <span>{blog.likes}</span>
-        </label>{' '}
-        <button onClick={handleLikeBlog}>like</button>
-      </div>
-      <div>author: {blog.author}</div>
-      {user.username === blog.user.username && (
-        <button style={deleteButtonStyle} onClick={handleDeleteBlog}>
-          remove
-        </button>
-      )}
-      <h2>Comments</h2>
-      <CommentForm blog={blog} />
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
-      </ul>
-    </div>
+    <Stack>
+      <Box maxWidth="md" borderWidth="1px" borderRadius="lg" overflow="hidden" padding={4} boxShadow="md">
+        <Heading size="lg">{blog.title}</Heading>
+        <ChakraLink href={blog.url}>{blog.url}</ChakraLink>
+        <InputGroup alignItems="center">
+          <TagLabel>likes:{blog.likes}</TagLabel>
+          <Button size="sm" marginLeft={5} onClick={handleLikeBlog} colorScheme="teal">
+            Like
+          </Button>
+        </InputGroup>
+        <Text>author: {blog.author}</Text>
+        <Stack direction="row">
+          {user.username === blog.user.username && (
+            <Button size="sm" colorScheme="twitter" onClick={handleDeleteBlog}>
+              Remove
+            </Button>
+          )}
+        </Stack>
+      </Box>
+      <Box maxWidth="md" borderWidth="1px" borderRadius="lg" overflow="hidden" padding={4} boxShadow="md">
+        <Stack>
+          <Heading size="md">Comments</Heading>
+          <CommentForm blog={blog} />
+          <Divider />
+          <List>
+            {blog.comments.map((comment) => (
+              <ListItem key={comment.id}>
+                <ListIcon as={BiComment} color="green.500" />
+                {comment.content}
+              </ListItem>
+            ))}
+          </List>
+        </Stack>
+      </Box>
+    </Stack>
   )
 }
 

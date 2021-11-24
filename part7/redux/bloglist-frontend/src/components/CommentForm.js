@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createComment } from '../reducers/blogReducer'
+import { Stack, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 
 const CommentForm = ({ blog }) => {
   const [content, setContent] = useState('')
@@ -18,14 +19,17 @@ const CommentForm = ({ blog }) => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleCommentFormSubmit}>
-        <div>
-          <label>content</label> <input value={content} onChange={handleContentChange} />
-        </div>
-        <button type="submit">comment</button>
-      </form>
-    </div>
+    <form onSubmit={handleCommentFormSubmit}>
+      <Stack spacing={3}>
+        <FormControl isRequired marginTop={2}>
+          <FormLabel>Content</FormLabel>
+          <Input value={content} onChange={handleContentChange} />
+        </FormControl>
+        <Button colorScheme="teal" type="submit">
+          comment
+        </Button>
+      </Stack>
+    </form>
   )
 }
 

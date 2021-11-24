@@ -1,6 +1,7 @@
 import React from 'react'
 import BlogItem from './BlogItem'
 import { useSelector } from 'react-redux'
+import { Heading, List, Stack } from '@chakra-ui/react'
 
 const BlogList = () => {
   const orderBlogsDescendant = (blogs) => {
@@ -10,12 +11,14 @@ const BlogList = () => {
   const blogs = useSelector((state) => orderBlogsDescendant(state.blogs))
 
   return (
-    <div id="blog-list">
-      <h3>Blogs list</h3>
-      {blogs.map((blog) => (
-        <BlogItem key={blog.id} blog={blog} />
-      ))}
-    </div>
+    <Stack>
+      <Heading size="lg">Blogs list</Heading>
+      <List>
+        {blogs.map((blog) => (
+          <BlogItem key={blog.id} blog={blog} />
+        ))}
+      </List>
+    </Stack>
   )
 }
 

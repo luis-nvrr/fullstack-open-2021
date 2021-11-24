@@ -1,35 +1,41 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box, Link as ChakraLink } from '@chakra-ui/react'
 
 const UsersView = () => {
   const users = useSelector((state) => state.users)
 
-  const style = {
-    textAlign: 'center'
-  }
-
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
+    <Box maxWidth="md" borderWidth="1px" borderRadius="lg" overflow="hidden" padding={4} boxShadow="md">
+      <Table size="md" variant="striped" colorScheme="teal">
+        <TableCaption>Users table</TableCaption>
+        <Thead>
+          <Tr>
+            <Th>User</Th>
+            <Th isNumeric>Blogs created</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
           {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td style={style}>{user.blogs.length}</td>
-            </tr>
+            <Tr key={user.id}>
+              <Td>
+                <ChakraLink>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </ChakraLink>
+              </Td>
+              <Td isNumeric>{user.blogs.length}</Td>
+            </Tr>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </Tbody>
+        <Tfoot>
+          <Tr>
+            <Th>User</Th>
+            <Th isNumeric>BlogsCreated</Th>
+          </Tr>
+        </Tfoot>
+      </Table>
+    </Box>
   )
 }
 

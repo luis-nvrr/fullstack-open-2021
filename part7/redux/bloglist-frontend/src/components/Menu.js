@@ -2,21 +2,37 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Logout from './Logout'
+import { Flex, Stack, Spacer, Box, Heading, Breadcrumb, BreadcrumbItem, Link as ChakraLink } from '@chakra-ui/react'
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
   return (
-    <div>
-      <Link style={padding} to="/">
-        blogs
-      </Link>
-      <Link style={padding} to="/create">
-        users
-      </Link>
-      <Logout />
-    </div>
+    <Flex color="white.500" boxShadow="lg">
+      <Stack alignItems="center" direction="row" padding={2}>
+        <Heading size="md" spacing={3} marginRight={4}>
+          Blogs App
+        </Heading>
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Box color="teal.500">
+              <Link to="/">
+                <ChakraLink>blogs</ChakraLink>
+              </Link>
+            </Box>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Box color="teal.500">
+              <Link to="/users">
+                <ChakraLink>users</ChakraLink>
+              </Link>
+            </Box>
+          </BreadcrumbItem>
+        </Breadcrumb>
+      </Stack>
+      <Spacer />
+      <Stack alignItems="center" direction="row" padding={2} marginRight={2}>
+        <Logout />
+      </Stack>
+    </Flex>
   )
 }
 

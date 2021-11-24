@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Route, Routes, useMatch, Navigate } from 'react-router-dom'
 import { initialize as initializeUser } from './reducers/userReducer'
 import { initialize as initializeBlog } from './reducers/blogReducer'
+import { Box, Stack, Heading } from '@chakra-ui/react'
 
 import './App.css'
 import UserBlogs from './components/UserBlogs'
@@ -36,39 +37,42 @@ const App = () => {
   }, [])
 
   return (
-    <div>
+    <Box>
       <Notification />
       {!loggedUser ? (
-        <div>
-          <h2>login</h2>
+        <Stack direction="row" justifyContent="center" alignItems="center">
           <LoginForm />
-        </div>
+        </Stack>
       ) : (
-        <div>
+        <Box>
           <Menu />
-          <h2>Blogs App</h2>
-          <div className="section"></div>
-          <Routes>
-            <Route path="/users/:id" element={<UserBlogs user={userMatched} />} />
-            <Route path="/blogs/:id" element={<IndividualBlogView blog={blogMatched} />} />
-            <Route path="/users" element={<UsersView />} />
-            <Route
-              path="/blogs"
-              element={
-                <div className="section">
-                  <h3>Create new Blog</h3>
-                  <Togglable buttonLabel="new blog">
-                    <BlogForm />
-                  </Togglable>
-                  <BlogList />
-                </div>
-              }
-            />
-            <Route path="*" element={<Navigate to="/blogs" />} />
-          </Routes>
-        </div>
+          <Box padding={4}>
+            <Routes>
+              <Route path="/users/:id" element={<UserBlogs user={userMatched} />} />
+              <Route path="/blogs/:id" element={<IndividualBlogView blog={blogMatched} />} />
+              <Route path="/users" element={<UsersView />} />
+              <Route
+                path="/blogs"
+                element={
+                  <Stack direction="column">
+                    <Box maxWidth="md" borderWidth="1px" borderRadius="lg" overflow="hidden" padding={4} boxShadow="md">
+                      <Heading size="lg">Create new Blog</Heading>
+                      <Togglable buttonLabel="New Blog">
+                        <BlogForm />
+                      </Togglable>
+                    </Box>
+                    <Box maxWidth="md" borderWidth="1px" borderRadius="lg" overflow="hidden" padding={4} boxShadow="md">
+                      <BlogList />
+                    </Box>
+                  </Stack>
+                }
+              />
+              <Route path="*" element={<Navigate to="/blogs" />} />
+            </Routes>
+          </Box>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }
 

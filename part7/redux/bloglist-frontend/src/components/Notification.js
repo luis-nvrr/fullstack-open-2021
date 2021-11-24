@@ -1,15 +1,21 @@
 import React from 'react'
 import './Notification.css'
 import { useSelector } from 'react-redux'
+import { Alert, AlertIcon } from '@chakra-ui/react'
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification)
 
-  if (!notification) {
+  if (!notification.message) {
     return <div></div>
   }
 
-  return <div className={notification.type}>{notification.message}</div>
+  return (
+    <Alert status={notification.type}>
+      <AlertIcon />
+      {notification.message}
+    </Alert>
+  )
 }
 
 export default Notification
