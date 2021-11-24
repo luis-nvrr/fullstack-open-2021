@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../reducers/loginReducer'
 
 const Logout = () => {
+  const style = {
+    display: 'inline-block'
+  }
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
 
@@ -12,14 +15,11 @@ const Logout = () => {
   }
 
   return (
-    <div>
-      <h3>User info</h3>
-      <form onSubmit={handleLogout}>
-        <div>{user.name} is logged in</div>
-        <button id="logout-button" type="submit">
-          logout
-        </button>
-      </form>
+    <div style={style}>
+      {user.name} is logged in{' '}
+      <button type="button" onClick={handleLogout}>
+        logout
+      </button>
     </div>
   )
 }

@@ -4,14 +4,14 @@ import React from 'react'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
-import Logout from './components/Logout'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import UsersView from './components/UsersView'
 import IndividualBlogView from './components/IndividualBlogView'
+import Menu from './components/Menu'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { Route, Routes, useMatch } from 'react-router-dom'
+import { Route, Routes, useMatch, Navigate } from 'react-router-dom'
 import { initialize } from './reducers/userReducer'
 
 import './App.css'
@@ -43,16 +43,15 @@ const App = () => {
         </div>
       ) : (
         <div>
+          <Menu />
           <h2>Blogs App</h2>
-          <div className="section">
-            <Logout />
-          </div>
+          <div className="section"></div>
           <Routes>
             <Route path="/users/:id" element={<UserBlogs user={userMatched} />} />
             <Route path="/blogs/:id" element={<IndividualBlogView blog={blogMatched} />} />
             <Route path="/users" element={<UsersView />} />
             <Route
-              path="/"
+              path="/blogs"
               element={
                 <div className="section">
                   <h3>Create new Blog</h3>
@@ -63,6 +62,7 @@ const App = () => {
                 </div>
               }
             />
+            <Route path="*" element={<Navigate to="/blogs" />} />
           </Routes>
         </div>
       )}
